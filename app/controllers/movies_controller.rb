@@ -13,11 +13,17 @@ class MoviesController < ApplicationController
 
   def index
     @movies = Movie.all
+    
     if not params[:sort].nil?
       session[:sort] = params[:sort]
     end
     if not params[:ratings].nil? 
       session[:ratings] = params[:ratings]
+    end
+    
+    flash.keep
+    if not params[:sort].nil? or not params[:ratings].nil?
+      redirect_to movies_path(session[:sort],session[:ratings])
     end
     
     @movies = Movie.order(session[:sort])
