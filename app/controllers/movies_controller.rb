@@ -1,5 +1,5 @@
 class MoviesController < ApplicationController
-
+  
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
@@ -12,7 +12,22 @@ class MoviesController < ApplicationController
   
 
   def index
-    @movies = Movie.order(params[:sort])
+    @movies = Movie.all
+    
+    if not params[:sort].nil?
+      @movies = Movie.order(params[:sort])
+    end
+    
+    @all_ratings =  Movie.get_ratings
+    @selected_ratings = @all_ratings
+  
+    ratings_hash = params[:ratings]
+    if not ratings_hash.nil?
+      @selected_ratings = ratings_hash.keys
+      unselected_movies = Movie.all - Movie.where(rating: @selected_ratings)
+      @movies = @movies - unselected_movies
+    end
+    
     if params[:sort] == 'title'
       @titleclicked = 'hilite'
     elsif params[:sort] == 'release_date'
