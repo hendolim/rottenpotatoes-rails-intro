@@ -37,6 +37,7 @@ class MoviesController < ApplicationController
     elsif session[:sort] == "release_date"
       @dateclicked = "hilite"
     end
+    
   end
 
   def new
@@ -46,7 +47,8 @@ class MoviesController < ApplicationController
   def create
     @movie = Movie.create!(movie_params)
     flash[:notice] = "#{@movie.title} was successfully created."
-    redirect_to movies_path
+    flash.keep
+    redirect_to movies_path(session[:sort],session[:ratings])
   end
 
   def edit
@@ -64,7 +66,8 @@ class MoviesController < ApplicationController
     @movie = Movie.find(params[:id])
     @movie.destroy
     flash[:notice] = "Movie "#{@movie.title}" deleted."
-    redirect_to movies_path
+    flash.keep
+    redirect_to movies_path(session[:sort],session[:ratings])
   end
 
 end
