@@ -13,24 +13,28 @@ class MoviesController < ApplicationController
 
   def index
     @movies = Movie.all
-    
     if not params[:sort].nil?
-      @movies = Movie.order(params[:sort])
+      session[:sort] = params[:sort]
+    end
+    if not params[:ratings].nil? 
+      session[:ratings] = params[:ratings]
     end
     
+    @movies = Movie.order(session[:sort])
     @all_ratings =  Movie.get_ratings
-    @selected_ratings = @all_ratings
-  
-    ratings_hash = params[:ratings]
-    if not ratings_hash.nil?
+    
+    if session[:ratings].nil?
+      @selected_ratings = @all_ratings
+    else
+      ratings_hash = session[:ratings]
       @selected_ratings = ratings_hash.keys
       unselected_movies = Movie.all - Movie.where(rating: @selected_ratings)
       @movies = @movies - unselected_movies
     end
     
-    if params[:sort] == 'title'
+    if session[:sort] == 'title'
       @titleclicked = 'hilite'
-    elsif params[:sort] == 'release_date'
+    elsif session[:sort] == 'release_date'
       @dateclicked = 'hilite'
     end
   end
