@@ -32,15 +32,15 @@ class MoviesController < ApplicationController
       @movies = @movies - unselected_movies
     end
     
-    if session[:sort] == 'title'
-      @titleclicked = 'hilite'
-    elsif session[:sort] == 'release_date'
-      @dateclicked = 'hilite'
+    if session[:sort] == "title"
+      @titleclicked = "hilite"
+    elsif session[:sort] == "release_date"
+      @dateclicked = "hilite"
     end
   end
 
   def new
-    # default: render 'new' template
+    # default: render "new" template
   end
 
   def create
@@ -63,7 +63,7 @@ class MoviesController < ApplicationController
   def destroy
     @movie = Movie.find(params[:id])
     @movie.destroy
-    flash[:notice] = "Movie '#{@movie.title}' deleted."
+    flash[:notice] = "Movie "#{@movie.title}" deleted."
     redirect_to movies_path
   end
 
